@@ -1,22 +1,25 @@
 #!/usr/bin/env python
 import datetime
 import holidays
+import ephem
 from dateutil import tz
-import ephem # to install, run `pip install pyephem`
 
-#from_zone = tz.gettz('UTC')
-#to_zone = tz.gettz('America/Anchorage')
+## Adjustable Params
+my_holidays = holidays.UnitedStates()
+my_timezone = 'America/Anchorage'
+my_latitude = '61.217'
+my_longitude = '-149.9'
 
-us_holidays = holidays.UnitedStates()
-
+## Program begins here
 from_zone = tz.tzutc()
 to_zone = tz.tzlocal()
+#to_zone = tz.gettz(my_timezone)	# if tzlocal doesn't work
 
 o = ephem.Observer()
-o.lat, o.long, o.date = '61:217', '-149.9', datetime.datetime.utcnow()
+o.lat, o.long, o.date = my_latitude, my_longitude, datetime.datetime.utcnow()
 sun = ephem.Sun(o)
 
-print "Anchorage"
+print "Sunrise/Sunset for " + my_timezone
 
 utc = o.next_rising(sun)
 utc = utc.datetime()
@@ -25,7 +28,7 @@ local = utc.astimezone(to_zone)
 
 weekno = datetime.datetime.weekday(local)
 if weekno < 5:
-  if local in us_holidays:
+  if local in my_holidays:
     print "Holiday"
   else:
     print "Workday Sunrise:", local

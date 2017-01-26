@@ -9,3 +9,13 @@ Currently:
 
 
 
+## INSTALL
+
+    git clone https://github.com/akhepcat/suntool
+    pip install holidays
+    pip install pyephem
+
+
+## CONFIGURE
+
+Adjust the variables at the top of the suntool script for your locale
