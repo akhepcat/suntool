@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+import datetime
+import holidays
+from dateutil import tz
+import ephem # to install, run `pip install pyephem`
+
+#from_zone = tz.gettz('UTC')
+#to_zone = tz.gettz('America/Anchorage')
+
+us_holidays = holidays.UnitedStates()
+
+from_zone = tz.tzutc()
+to_zone = tz.tzlocal()
+
+o = ephem.Observer()
+o.lat, o.long, o.date = '61:217', '-149.9', datetime.datetime.utcnow()
+sun = ephem.Sun(o)
+
+print "Anchorage"
+
+utc = o.next_rising(sun)
+utc = utc.datetime()
+utc = utc.replace(tzinfo=from_zone)
+local = utc.astimezone(to_zone)
+
+weekno = datetime.datetime.weekday(local)
+if weekno < 5:
+  if local in us_holidays:
+    print "Holiday"
+  else:
+    print "Workday Sunrise:", local
+
+else:
+  print "Weekend"
+
+utc = o.next_setting(sun)
+utc = utc.datetime()
+utc = utc.replace(tzinfo=from_zone)
+local = utc.astimezone(to_zone)
+print "sunset:", local
+
