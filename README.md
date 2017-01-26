@@ -12,8 +12,8 @@ Currently:
 ## INSTALL
 
     git clone https://github.com/akhepcat/suntool
-    pip install holidays
-    pip install pyephem
+    sudo pip install holidays
+    sudo pip install pyephem
 
 
 ## CONFIGURE
