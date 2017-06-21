@@ -10,6 +10,12 @@ my_timezone = 'America/Anchorage'
 my_latitude = '61.217'
 my_longitude = '-149.9'
 
+# Times are 24h clock
+my_wakeup = '06:30'	# What time do the the lights come on in the morning
+my_atwork = '08:30'	# What time do the lights go off for work
+my_offwork = '17:00'	# What time do the lights come on 'after work'
+my_bedtime = '22:30'	# What time do the lights go off at night
+
 ## Program begins here
 from_zone = tz.tzutc()
 to_zone = tz.tzlocal()
@@ -25,20 +31,28 @@ utc = o.next_rising(sun)
 utc = utc.datetime()
 utc = utc.replace(tzinfo=from_zone)
 local = utc.astimezone(to_zone)
-
 weekno = datetime.datetime.weekday(local)
+at_local = local.strftime("%H:%M %Y-%m-%d")
+wake_local = local.strftime( my_wakeup + " %Y-%m-%d")
+
 if weekno < 5:
   if local in my_holidays:
     print "Holiday"
   else:
-    print "Workday Sunrise:", local
-
+    print "Workday"
 else:
   print "Weekend"
+
+print "Sunrise:", at_local, "  wakeup:", wake_local
+print " sunrise is after wakeup: ", at_local > wake_local
 
 utc = o.next_setting(sun)
 utc = utc.datetime()
 utc = utc.replace(tzinfo=from_zone)
 local = utc.astimezone(to_zone)
-print "sunset:", local
-
+at_local = local.strftime("%H:%M %Y-%m-%d")
+bed_local = local.strftime(my_bedtime + " %Y-%m-%d")
+offwork_local = local.strftime(my_offwork + " %Y-%m-%d")
+print " Sunset:", at_local, " bedtime:", bed_local
+print " sunset is before offwork: ", at_local < offwork_local
+print " sunset is after bedtime: ", at_local > bed_local
